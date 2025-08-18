@@ -1,6 +1,6 @@
 '''
 users_api_v12.py
-"""Flask Blueprint for user-related API endpoints."""
+Flask Blueprint for user-related API endpoints.
 '''
 from datetime import datetime, timedelta
 from typing import Dict, List, Tuple, Union
@@ -13,9 +13,9 @@ users_bp = Blueprint("users", __name__)
 
 
 def check_permission(endpoint: str, method: str):
-    """
+    '''
     Decorator to check if authenticated user has permission for the endpoint and method.
-    """
+    '''
     def decorator(func):
         def wrapped(*args, **kwargs):
             if not auth.current_user():
@@ -39,11 +39,12 @@ def check_permission(endpoint: str, method: str):
 @auth.login_required
 @check_permission(BASE_ENDPOINT, "POST")
 def create_user() -> Tuple[Dict[str, str], int]:
-    """Create a new user via POST request.
+    '''
+    Create a new user via POST request.
 
     Returns:
         tuple: JSON response with password and HTTP status code
-    """
+    '''
     data = request.get_json(silent=True)
     now = datetime.now()
     if not data:
@@ -117,11 +118,12 @@ def create_user() -> Tuple[Dict[str, str], int]:
 @auth.login_required
 @check_permission(BASE_ENDPOINT, "GET")
 def list_users() -> Tuple[Union[List[Dict], Dict[str, str]], int]:
-    """List all users via GET request.
+    '''
+    List all users via GET request.
 
     Returns:
         tuple: JSON response with user data and HTTP status code
-    """
+    '''
     now = datetime.now()
     perms = user_store.get_effective_permissions(auth.current_user())
     if "users/GET_ALL" in perms:
@@ -159,11 +161,12 @@ def list_users() -> Tuple[Union[List[Dict], Dict[str, str]], int]:
 @auth.login_required
 @check_permission(BASE_ENDPOINT, "PUT")
 def update_user() -> Tuple[Dict, int]:
-    """Update an existing user via PUT request.
+    '''
+    Update an existing user via PUT request.
 
     Returns:
         tuple: JSON response with updated data and HTTP status code
-    """
+    '''
     data = request.get_json(silent=True)
     now = datetime.now()
     if not data:
@@ -225,11 +228,12 @@ def update_user() -> Tuple[Dict, int]:
 @auth.login_required
 @check_permission(BASE_ENDPOINT, "DELETE")
 def delete_user() -> Tuple[str, int]:
-    """Delete a user via DELETE request.
+    '''
+    Delete a user via DELETE request.
 
     Returns:
         tuple: Empty response and HTTP status code
-    """
+    '''
     data = request.get_json(silent=True)
     if not data:
         logging.error("Failed delete: No JSON provided by %s", auth.current_user())
@@ -261,11 +265,12 @@ def delete_user() -> Tuple[str, int]:
 @auth.login_required
 @check_permission(BASE_ENDPOINT, "PATCH")
 def change_own_password() -> Tuple[Dict, int]:
-    """Change the logged-in user's password via PATCH request.
+    '''
+    Change the logged-in user's password via PATCH request.
 
     Returns:
         tuple: JSON response and HTTP status code
-    """
+    '''
     data = request.get_json(silent=True)
     if not data:
         logging.error("Failed password change: No JSON provided by %s", auth.current_user())

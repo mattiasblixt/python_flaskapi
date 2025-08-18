@@ -1,6 +1,8 @@
 '''
 core_v12.py
-"""Core components for user management Flask API."""
+
+Core components for user management Flask API.
+
 '''
 import json
 import sys
@@ -37,17 +39,23 @@ auth = HTTPBasicAuth()
 
 
 class UserStore:
-    """Manages user data storage and access control."""
+    '''
+    Manages user data storage and access control.
+    '''
 
     def __init__(self) -> None:
-        """Initialize UserStore with empty user dictionary and load users."""
+        '''
+        Initialize UserStore with empty user dictionary and load users.
+        '''
         self.users: Dict[str, Dict] = {}
         self.access_groups: Dict[str, List[str]] = {}
         self.load_access_groups()
         self.load_users()
 
     def load_access_groups(self) -> None:
-        """Load access groups from access_groups.json file if it exists."""
+        '''
+        Load access groups from access_groups.json file if it exists.
+        '''
         if os.path.exists(ACCESS_GROUPS_FILE):
             with open(ACCESS_GROUPS_FILE, "r", encoding="utf-8") as file:
                 self.access_groups = json.load(file)
@@ -63,26 +71,40 @@ class UserStore:
                     "access_groups/PUT",
                     "users/PATCH",
                 ],
-                "consumers": ["users/GET_OWN", "users/PATCH"],
-                "users/GET_ALL": ["users/GET_ALL"],
-                "users/POST": ["users/POST"],
-                "users/PUT": ["users/PUT"],
-                "users/DELETE": ["users/DELETE"],
-                "users/GET_OWN": ["users/GET_OWN"],
-                "access_groups/GET": ["access_groups/GET"],
-                "access_groups/POST": ["access_groups/POST"],
-                "access_groups/PUT": ["access_groups/PUT"],
-                "users/PATCH": ["users/PATCH"],
+                "consumers": ["users/GET_OWN",
+                              "users/PATCH",
+                              ],
+                "users/GET_ALL": ["users/GET_ALL",
+                                  ],
+                "users/POST": ["users/POST",
+                               ],
+                "users/PUT": ["users/PUT",
+                              ],
+                "users/DELETE": ["users/DELETE",
+                                 ],
+                "users/GET_OWN": ["users/GET_OWN",
+                                  ],
+                "access_groups/GET": ["access_groups/GET",
+                                      ],
+                "access_groups/POST": ["access_groups/POST",
+                                       ],
+                "access_groups/PUT": ["access_groups/PUT",
+                                      ],
+                "users/PATCH": ["users/PATCH",
+                                ],
             }
             self.save_access_groups()
 
     def save_access_groups(self) -> None:
-        """Save access groups to access_groups.json file."""
+        '''
+        Save access groups to access_groups.json file.
+        '''
         with open(ACCESS_GROUPS_FILE, "w", encoding="utf-8") as file:
             json.dump(self.access_groups, file)
 
     def add_access_group(self, name: str, permissions: List[str]) -> None:
-        """Add a new access group.
+        '''
+        Add a new access group.
 
         Args:
             name: The name of the access group
@@ -90,7 +112,7 @@ class UserStore:
 
         Raises:
             ValueError: If the access group already exists
-        """
+        '''
         if name in self.access_groups:
             raise ValueError("Access group already exists")
         self.access_groups[name] = permissions
@@ -102,7 +124,8 @@ class UserStore:
         add_permissions: Optional[List[str]] = None,
         remove_permissions: Optional[List[str]] = None,
     ) -> None:
-        """Update an existing access group's permissions.
+        '''
+        Update an existing access group's permissions.
 
         Args:
             name: The name of the access group to update
@@ -111,7 +134,7 @@ class UserStore:
 
         Raises:
             ValueError: If the access group does not exist
-        """
+        '''
         if name not in self.access_groups:
             raise ValueError("Access group does not exist")
         if add_permissions:
@@ -125,33 +148,36 @@ class UserStore:
         self.save_access_groups()
 
     def get_access_groups(self) -> Dict[str, List[str]]:
-        """Get all access groups.
+        '''
+        Get all access groups.
 
         Returns:
             dict: Dictionary of access groups and their permissions
-        """
+        '''
         return self.access_groups
 
     def get_access_group(self, name: str) -> Optional[List[str]]:
-        """Get permissions for a specific access group.
+        '''
+        Get permissions for a specific access group.
 
         Args:
             name: The name of the access group
 
         Returns:
             list: List of permissions if found, None otherwise
-        """
+        '''
         return self.access_groups.get(name)
 
     def get_users_in_group(self, name: str) -> List[str]:
-        """Get users belonging to a specific access group.
+        '''
+        Get users belonging to a specific access group.
 
         Args:
             name: The name of the access group
 
         Returns:
             list: List of usernames in the group
-        """
+        '''
         return [
             username
             for username, info in self.users.items()
@@ -159,7 +185,9 @@ class UserStore:
         ]
 
     def load_users(self) -> None:
-        """Load user data from users.json file if it exists."""
+        '''
+        Load user data from users.json file if it exists.
+        '''
         if os.path.exists(USERS_FILE):
             with open(USERS_FILE, "r", encoding="utf-8") as file:
                 data = json.load(file)
@@ -171,7 +199,9 @@ class UserStore:
                     }
 
     def save_users(self) -> None:
-        """Save user data to users.json file."""
+        '''
+        Save user data to users.json file.
+        '''
         data = {}
         for username, info in self.users.items():
             data[username] = {
@@ -183,7 +213,8 @@ class UserStore:
             json.dump(data, file)
 
     def manage_password(self, username: str, password: Optional[str] = None) -> Optional[str]:
-        """Manage user passwords in pass.json file.
+        '''
+        Manage user passwords in pass.json file.
 
         Args:
             username: The username whose password is managed
@@ -191,7 +222,7 @@ class UserStore:
 
         Returns:
             str: The password if retrieving, None if setting or user not found
-        """
+        '''
         passwords = {}
         if os.path.exists(PASSWORDS_FILE):
             with open(PASSWORDS_FILE, "r", encoding="utf-8") as file:
@@ -212,7 +243,8 @@ class UserStore:
         validity: datetime,
         access_groups: Optional[List[str]] = None
     ) -> None:
-        """Add a new user to the store and save to file.
+        '''
+        Add a new user to the store and save to file.
 
         Args:
             username: The username of the new user
@@ -220,7 +252,7 @@ class UserStore:
             owner: The owner of the user account
             validity: The validity date of the user account
             access_groups: List of access group names
-        """
+        '''
         self.users[username] = {
             "owner": owner,
             "validity": validity,
@@ -237,7 +269,8 @@ class UserStore:
         add_access_groups: Optional[List[str]] = None,
         remove_access_groups: Optional[List[str]] = None
     ) -> bool:
-        """Update an existing user's password, validity, or access groups.
+        '''
+        Update an existing user's password, validity, or access groups.
 
         Args:
             username: The username to update
@@ -248,7 +281,7 @@ class UserStore:
 
         Returns:
             bool: True if update successful, False if user not found
-        """
+        '''
         if username in self.users:
             if validity is not None:
                 self.users[username]["validity"] = validity
@@ -265,14 +298,15 @@ class UserStore:
         return False
 
     def delete_user(self, username: str) -> bool:
-        """Delete a user from the store.
+        '''
+        Delete a user from the store.
 
         Args:
             username: The username to delete
 
         Returns:
             bool: True if deletion successful, False if user not found
-        """
+        '''
         if username in self.users:
             del self.users[username]
             self.save_users()
@@ -287,14 +321,15 @@ class UserStore:
         return False
 
     def get_user(self, username: str) -> Optional[Dict]:
-        """Get user data by username.
+        '''
+        Get user data by username.
 
         Args:
             username: The username to retrieve
 
         Returns:
             dict: User data if found, None otherwise
-        """
+        '''
         user = self.users.get(username)
         if user:
             password = self.manage_password(username)
@@ -304,11 +339,12 @@ class UserStore:
         return user
 
     def get_all_users(self) -> Dict[str, Dict]:
-        """Get all users in the store.
+        '''
+        Get all users in the store.
 
         Returns:
             dict: Dictionary of all users
-        """
+        '''
         users = {}
         for username, info in self.users.items():
             users[username] = info.copy()
@@ -318,14 +354,15 @@ class UserStore:
         return users
 
     def get_effective_permissions(self, username: str) -> Set[str]:
-        """Get the effective permissions for a user based on their access groups.
+        '''
+        Get the effective permissions for a user based on their access groups.
 
         Args:
             username: The username to check
 
         Returns:
             set: Set of effective permissions
-        """
+        '''
         user = self.get_user(username)
         if not user:
             return set()
@@ -335,7 +372,8 @@ class UserStore:
         return perms
 
     def has_permission(self, username: str, endpoint: str, method: str) -> bool:
-        """Check if user has permission for the specified endpoint and method.
+        '''
+        Check if user has permission for the specified endpoint and method.
 
         Args:
             username: The username to check
@@ -344,7 +382,7 @@ class UserStore:
 
         Returns:
             bool: True if user has permission, False otherwise
-        """
+        '''
         perms = self.get_effective_permissions(username)
         if method == "GET" and endpoint == "users":
             return "users/GET_ALL" in perms or "users/GET_OWN" in perms
@@ -358,7 +396,8 @@ user_store = UserStore()
 
 @auth.verify_password
 def verify_password(username: str, password: str) -> Optional[str]:
-    """Verify user credentials for authentication.
+    '''
+    Verify user credentials for authentication.
 
     Args:
         username: The username to verify
@@ -366,7 +405,7 @@ def verify_password(username: str, password: str) -> Optional[str]:
 
         Returns:
             str: Username if credentials valid, None otherwise
-    """
+    '''
     user = user_store.get_user(username)
     if user and user["password"] == password:
         return username

@@ -12,7 +12,9 @@ access_groups_bp = Blueprint("access_groups", __name__)
 
 
 def check_permission(endpoint: str, method: str):
-    """Decorator to check if authenticated user has permission for the endpoint and method."""
+    '''
+    Decorator to check if authenticated user has permission for the endpoint and method.
+    '''
     def decorator(func):
         def wrapped(*args, **kwargs):
             if not auth.current_user():
@@ -36,11 +38,12 @@ def check_permission(endpoint: str, method: str):
 @auth.login_required
 @check_permission(ACCESS_GROUPS_ENDPOINT, "GET")
 def list_access_groups() -> Tuple[List[Dict], int]:
-    """List all access groups and their permissions.
+    '''
+    List all access groups and their permissions.
 
     Returns:
         tuple: JSON response with access groups data and HTTP status code
-    """
+    '''
     groups = user_store.get_access_groups()
     result = [{"name": name, "permissions": perms} for name, perms in groups.items()]
     return jsonify(result), 200
@@ -50,14 +53,15 @@ def list_access_groups() -> Tuple[List[Dict], int]:
 @auth.login_required
 @check_permission(ACCESS_GROUPS_ENDPOINT, "GET")
 def get_access_group_details(group_name: str) -> Tuple[Dict, int]:
-    """Get details of a specific access group including permissions and users.
+    '''
+    Get details of a specific access group including permissions and users.
 
     Args:
         group_name: The name of the access group
 
     Returns:
         tuple: JSON response with group details and HTTP status code
-    """
+    '''
     perms = user_store.get_access_group(group_name)
     if perms is None:
         logging.error(
@@ -74,11 +78,12 @@ def get_access_group_details(group_name: str) -> Tuple[Dict, int]:
 @auth.login_required
 @check_permission(ACCESS_GROUPS_ENDPOINT, "POST")
 def create_access_group() -> Tuple[Dict, int]:
-    """Create a new access group via POST request.
+    '''
+    Create a new access group via POST request.
 
     Returns:
         tuple: JSON response and HTTP status code
-    """
+    '''
     data = request.get_json(silent=True)
     if not data:
         logging.error("Failed access group creation: No JSON provided by %s", auth.current_user())
@@ -105,14 +110,15 @@ def create_access_group() -> Tuple[Dict, int]:
 @auth.login_required
 @check_permission(ACCESS_GROUPS_ENDPOINT, "PUT")
 def update_access_group_details(group_name: str) -> Tuple[Dict, int]:
-    """Update an access group's permissions via PUT request.
+    '''
+    Update an access group's permissions via PUT request.
 
     Args:
         group_name: The name of the access group to update
 
     Returns:
         tuple: JSON response and HTTP status code
-    """
+    '''
     data = request.get_json(silent=True)
     if not data:
         logging.error("Failed access group update: No JSON provided by %s", auth.current_user())

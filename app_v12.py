@@ -1,6 +1,6 @@
 '''
 app_v12.py
-"""Flask API for user management with role-based access control."""
+Flask API for user management with role-based access control.
 '''
 from typing import Dict, Tuple
 
@@ -11,17 +11,17 @@ from access_groups_api_v12 import access_groups_bp
 
 app = Flask(__name__)
 
-
 @auth.error_handler
 def auth_error(status: int) -> Tuple[Dict[str, str], int]:
-    """Handle authentication errors.
+    '''
+    Handle authentication errors.
 
     Args:
         status: HTTP status code for the error
 
     Returns:
         tuple: JSON response with error message and status code
-    """
+    '''
     auth_header = request.authorization
     attempted_user = auth_header.username if auth_header else "unknown"
     data = request.get_json(silent=True)
