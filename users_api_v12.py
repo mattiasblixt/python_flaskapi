@@ -7,7 +7,7 @@ from typing import Dict, List, Tuple, Union
 import secrets
 
 from flask import Blueprint, jsonify, request
-from core_v12 import auth, user_store, logging, MAX_DAYS, PASSWORD_LENGTH, BASE_ENDPOINT
+from utils import auth, user_store, logging, MAX_DAYS, PASSWORD_LENGTH, BASE_ENDPOINT
 
 users_bp = Blueprint("users", __name__)
 

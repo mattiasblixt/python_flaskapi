@@ -6,7 +6,7 @@ Flask Blueprint for access group-related API endpoints.
 from typing import Dict, List, Tuple
 
 from flask import Blueprint, jsonify, request
-from core_v12 import auth, user_store, logging, ACCESS_GROUPS_ENDPOINT
+from utils import auth, user_store, logging, ACCESS_GROUPS_ENDPOINT
 
 access_groups_bp = Blueprint("access_groups", __name__)
 

@@ -7,6 +7,7 @@ Flask API for user management with role-based access control."""
 import json
 import logging
 import os
+import sys
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Set, Tuple, Union
 
@@ -25,7 +26,7 @@ PASSWORD_LENGTH = 16
 
 logging.basicConfig(
     filename=LOG_FILE,
-    level=logging.INFO,
+    level=logging.DEBUG,
     format="%(asctime)s - %(message)s"
 )
 
@@ -36,7 +37,9 @@ class UserStore:
     """
 
     def __init__(self) -> None:
-        """Initialize UserStore with empty user dictionary and load users."""
+        """
+        Initialize UserStore with empty user dictionary and load users.
+        """
         self.users: Dict[str, Dict] = {}
         self.access_groups: Dict[str, List[str]] = {
             "super": ["users/GET_ALL", "users/POST", "users/PUT", "users/DELETE"],
@@ -63,6 +66,9 @@ class UserStore:
                         "validity": datetime.fromisoformat(info["validity"]),
                         "access_groups": info.get("access_groups", ["consumers"])
                     }
+        else:
+            logging.error('file %s doesnt exists', USERS_FILE)
+            sys.exit()
 
     def save_users(self) -> None:
         """
@@ -508,6 +514,11 @@ def delete_user() -> Tuple[str, int]:
     )
     return "", 204
 
+def main():
+    my_port=5000
+    logging.info('flask running on port %s', my_port)
+    app.run(debug=True, port=my_port)
+
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    main()

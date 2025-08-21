@@ -5,7 +5,7 @@ Flask API for user management with role-based access control.
 from typing import Dict, Tuple
 
 from flask import Flask, jsonify, request
-from core_v12 import auth, logging
+from utils import auth, logging
 from users_api_v12 import users_bp
 from access_groups_api_v12 import access_groups_bp
 
