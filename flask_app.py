@@ -1,5 +1,4 @@
 '''
-app_v12.py
 Flask API for user management with role-based access control.
 '''
 from typing import Dict, Tuple
