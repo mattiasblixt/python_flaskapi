@@ -1,0 +1,7 @@
+ldap:
+  host: 'ldap://your-ad-server:389'
+  base_dn: 'dc=example,dc=com'
+  bind_user: 'cn=binduser,ou=users,dc=example,dc=com'
+  bind_password: 'bindpassword'
+  user_search_filter: '(sAMAccountName={})'
+  group_search_filter: '(member:1.2.840.113556.1.4.1941:={})'

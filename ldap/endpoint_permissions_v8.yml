@@ -1,0 +1,23 @@
+endpoint_permissions:
+  users/POST:
+    - 'cn=UserAdmins,ou=groups,dc=example,dc=com'
+    - 'cn=SuperAdmins,ou=groups,dc=example,dc=com'
+  users/PUT:
+    - 'cn=UserAdmins,ou=groups,dc=example,dc=com'
+  users/DELETE:
+    - 'cn=SuperAdmins,ou=groups,dc=example,dc=com'
+  users/PATCH:
+    - 'cn=UserAdmins,ou=groups,dc=example,dc=com'
+  access_groups/GET:
+    - 'cn=ReadOnlyGroup,ou=groups,dc=example,dc=com'
+    - 'cn=SuperAdmins,ou=groups,dc=example,dc=com'
+  access_groups/POST:
+    - 'cn=GroupAdmins,ou=groups,dc=example,dc=com'
+  access_groups/PUT:
+    - 'cn=GroupAdmins,ou=groups,dc=example,dc=com'
+  login/POST:
+    - 'cn=Everyone,ou=groups,dc=example,dc=com'  # Allow all authenticated users
+  create_api_token/POST:
+    - 'cn=SuperAdmins,ou=groups,dc=example,dc=com'  # Restrict to super admins or adjust as needed
+  api_token/GET:
+    - 'cn=Everyone,ou=groups,dc=example,dc=com'  # Allow all authenticated users
