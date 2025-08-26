@@ -1,10 +1,9 @@
 '''
-auth_v8.py
 '''
 import secrets
+import yaml
 import logging
 from datetime import datetime, timedelta
-import yaml
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import create_access_token
 from ldap3 import Server, Connection, ALL
@@ -12,6 +11,7 @@ from ldap3.core.exceptions import LDAPException
 from utils_v8 import ldap_auth_required, requires_endpoint_access, load_api_tokens
 from utils_v8 import LDAP_HOST, LDAP_USER_SEARCH_FILTER, LDAP_BASE_DN, SUBTREE
 
+# pylint: disable=no-member
 auth_bp = Blueprint('auth', __name__)
 
 # Configure logging
@@ -87,7 +87,7 @@ def create_api_token():
 
     # Save updated API tokens to YAML
     try:
-        with open('api_tokens.yaml', 'w', encoding='utf-8') as file:
+        with open('api_tokens.yaml', 'w') as file:
             yaml.safe_dump({'api_tokens': api_tokens}, file)
 
         # Log the change
