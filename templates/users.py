@@ -1,5 +1,4 @@
 '''
-users_api_v12.py
 Flask Blueprint for user-related API endpoints.
 '''
 from datetime import datetime, timedelta

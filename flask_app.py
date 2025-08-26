@@ -5,8 +5,9 @@ from typing import Dict, Tuple
 
 from flask import Flask, jsonify, request
 from utils import auth, logging
-from users_api_v12 import users_bp
-from access_groups_api_v12 import access_groups_bp
+from templates.users import users_bp
+from templates.access_groups import access_groups_bp
+
 
 app = Flask(__name__)
 

@@ -1,5 +1,4 @@
 '''
-access_groups_api_v12
 Flask Blueprint for access group-related API endpoints.
 '''
 
